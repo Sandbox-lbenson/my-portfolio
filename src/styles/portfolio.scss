@@ -45,6 +45,36 @@ body.menu-open {
   overflow: hidden;
 }
 
+@keyframes grid-drift {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  100% {
+    background-position: 68px 34px, 34px 68px;
+  }
+}
+
+@keyframes signal-line {
+  0%,
+  100% {
+    opacity: 0.22;
+    transform: scaleX(0.72);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes stat-sheen {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
 button,
 a {
   font: inherit;
@@ -208,14 +238,133 @@ h3 {
 .hero__media {
   position: absolute;
   inset: 0;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.hero__media::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   background:
     linear-gradient(90deg, rgba(17, 19, 24, 0.96) 0%, rgba(17, 19, 24, 0.86) 52%, rgba(17, 19, 24, 0.48) 100%),
     url('/selfie.png') right 6% center / min(34rem, 38%) auto no-repeat,
     var(--ink);
+  content: "";
+}
+
+.hero__media::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(116, 167, 215, 0.13) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(98, 182, 143, 0.12) 1px, transparent 1px);
+  background-size: 68px 68px;
+  content: "";
+  mask-image: linear-gradient(90deg, transparent 0%, black 42%, black 100%);
+  opacity: 0.28;
+  animation: grid-drift 18s linear infinite;
+}
+
+.hero__portrait-light {
+  position: absolute;
+  top: 14%;
+  right: 3%;
+  z-index: 1;
+  width: min(39rem, 44vw);
+  height: 68%;
+  border: 1px solid rgba(224, 170, 69, 0.18);
+  background:
+    linear-gradient(135deg, rgba(224, 170, 69, 0.18), transparent 42%),
+    linear-gradient(45deg, transparent, rgba(116, 167, 215, 0.12), transparent);
+  clip-path: polygon(12% 0, 100% 0, 88% 100%, 0 100%);
+  opacity: 0.78;
+}
+
+.hero__trace {
+  position: absolute;
+  right: 0;
+  z-index: 2;
+  width: min(44rem, 48vw);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(98, 182, 143, 0.92), rgba(224, 170, 69, 0.68), transparent);
+  opacity: 0.64;
+  transform-origin: right;
+  animation: signal-line 5.8s ease-in-out infinite;
+}
+
+.hero__trace--one {
+  top: 32%;
+}
+
+.hero__trace--two {
+  top: 66%;
+  width: min(36rem, 42vw);
+  animation-delay: 1.2s;
+}
+
+.hero__signal-map {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+.hero-signal {
+  position: absolute;
+  top: var(--signal-y);
+  left: var(--signal-x);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 38px;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid rgba(244, 239, 231, 0.16);
+  border-radius: 8px;
+  background: rgba(17, 19, 24, 0.7);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+  color: var(--paper);
+  translate: -50% -50%;
+  backdrop-filter: blur(10px);
+}
+
+.hero-signal::before {
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--green);
+  background: rgba(98, 182, 143, 0.34);
+  content: "";
+}
+
+.hero-signal svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--gold);
+}
+
+.hero-signal small {
+  color: var(--muted-2);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.hero__scan {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 4;
+  width: min(47rem, 52vw);
+  height: 10rem;
+  background: linear-gradient(180deg, transparent, rgba(116, 167, 215, 0.14), transparent);
+  mix-blend-mode: screen;
+  opacity: 0.78;
+  pointer-events: none;
 }
 
 .hero__content {
   position: relative;
+  z-index: 6;
   width: min(680px, calc(100% - 2rem));
   padding: 5rem;
 }
@@ -311,13 +460,37 @@ h3 {
 }
 
 .hero__stats span {
+  position: relative;
   display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   min-height: 96px;
   align-content: center;
+  align-items: center;
   gap: 0.25rem;
   padding: 1rem;
   background: rgba(17, 19, 24, 0.76);
   color: var(--muted);
+  overflow: hidden;
+}
+
+.hero__stats span::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent, rgba(224, 170, 69, 0.12), transparent);
+  content: "";
+  transform: translateX(-120%);
+}
+
+.hero__stats span:hover::before {
+  animation: stat-sheen 0.8s ease;
+}
+
+.hero__stats svg {
+  grid-row: 1 / 3;
+  width: 1.35rem;
+  height: 1.35rem;
+  margin-right: 0.45rem;
+  color: var(--gold);
 }
 
 .hero__stats strong {
@@ -458,14 +631,58 @@ h3 {
 
 .project-card {
   display: grid;
+  perspective: 1200px;
+}
+
+.project-card__surface {
+  position: relative;
+  display: grid;
+  height: 100%;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel);
   box-shadow: var(--shadow);
+  transform-style: preserve-3d;
+  isolation: isolate;
+}
+
+.project-card__surface::before {
+  position: absolute;
+  inset: -1px;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(224, 170, 69, 0.3), transparent 34%),
+    linear-gradient(135deg, rgba(98, 182, 143, 0.18), transparent 42%, rgba(116, 167, 215, 0.16));
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.project-card__surface::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(110deg, transparent 0%, rgba(244, 239, 231, 0.14) 18%, transparent 34%);
+  content: "";
+  pointer-events: none;
+  transform: translateX(-145%);
+  transition: transform 0.68s ease;
+}
+
+.project-card:hover .project-card__surface::before {
+  opacity: 1;
+}
+
+.project-card:hover .project-card__surface::after {
+  transform: translateX(145%);
 }
 
 .project-card__link {
+  position: relative;
+  z-index: 2;
   display: grid;
 }
 
@@ -480,15 +697,34 @@ h3 {
     var(--panel-2);
 }
 
+.project-card__image::after {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(244, 239, 231, 0.12) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(244, 239, 231, 0.08) 1px, transparent 1px);
+  background-size: 36px 36px;
+  content: "";
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
 .project-card__image > img:first-child {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.35s ease;
+  transition:
+    filter 0.35s ease,
+    transform 0.35s ease;
 }
 
 .project-card:hover .project-card__image > img:first-child {
-  transform: scale(1.035);
+  filter: saturate(1.12) contrast(1.05);
+  transform: scale(1.055) translate(var(--media-x, 0), var(--media-y, 0));
+}
+
+.project-card:hover .project-card__image::after {
+  opacity: 0.38;
 }
 
 .project-card__logo,
@@ -524,6 +760,8 @@ h3 {
 }
 
 .project-card__actions {
+  position: relative;
+  z-index: 2;
   flex-wrap: wrap;
   gap: 0.75rem;
   padding: 0 1.2rem 1.2rem;
@@ -806,11 +1044,21 @@ h3 {
     padding: 4rem 1rem;
   }
 
-  .hero__media {
+  .hero__media::before {
     background:
       linear-gradient(90deg, rgba(17, 19, 24, 0.96), rgba(17, 19, 24, 0.82)),
       url('/selfie.png') right 10% bottom / 22rem auto no-repeat,
       var(--ink);
+  }
+
+  .hero__portrait-light {
+    right: -6rem;
+    width: 30rem;
+    opacity: 0.58;
+  }
+
+  .hero-signal {
+    scale: 0.86;
   }
 
   .hero h1,
@@ -852,11 +1100,18 @@ h3 {
     min-height: 84svh;
   }
 
-  .hero__media {
+  .hero__media::before {
     background:
       linear-gradient(180deg, rgba(17, 19, 24, 0.98), rgba(17, 19, 24, 0.9)),
       url('/selfie.png') center bottom / 19rem auto no-repeat,
       var(--ink);
+  }
+
+  .hero__signal-map,
+  .hero__trace,
+  .hero__scan,
+  .hero__portrait-light {
+    display: none;
   }
 
   .hero h1,
@@ -904,5 +1159,20 @@ h3 {
 
   .resume-frame {
     min-height: 66vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .project-card__surface {
+    transform: none !important;
   }
 }

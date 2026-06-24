@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Icon } from '@iconify/react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, MotionConfig, useReducedMotion } from 'framer-motion';
 import {
   Link,
   Navigate,
@@ -43,6 +43,41 @@ const fadeUp = {
   hidden: { opacity: 0, y: 28 },
   show: { opacity: 1, y: 0 },
 };
+
+const revealContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.96, y: 18 },
+  show: { opacity: 1, scale: 1, y: 0 },
+};
+
+const heroSignals = [
+  { label: 'IAM', icon: 'mdi:shield-key-outline', x: 68, y: 25, delay: 0 },
+  { label: 'SSO', icon: 'mdi:key-chain', x: 86, y: 39, delay: 0.28 },
+  { label: 'AD', icon: 'mdi:server-network', x: 63, y: 58, delay: 0.48 },
+  { label: 'API', icon: 'mdi:api', x: 82, y: 70, delay: 0.18 },
+];
+
+const heroStats = [
+  {
+    label: 'IAM',
+    detail: 'RapidIdentity escalations',
+    icon: 'mdi:shield-key-outline',
+  },
+  {
+    label: 'SaaS',
+    detail: 'Sold production app',
+    icon: 'mdi:rocket-launch-outline',
+  },
+  {
+    label: 'Labs',
+    detail: 'Hyper-V, AD, Azure',
+    icon: 'mdi:server-network',
+  },
+];
 
 function Monogram({ size = 44 }) {
   return (
@@ -246,10 +281,75 @@ function Header() {
 
 function SectionHeading({ eyebrow, title, children }) {
   return (
-    <div className="section-heading">
-      <p>{eyebrow}</p>
-      <h2>{title}</h2>
-      {children && <span>{children}</span>}
+    <motion.div
+      className="section-heading"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: '-90px' }}
+      variants={revealContainer}
+    >
+      <motion.p variants={fadeUp}>{eyebrow}</motion.p>
+      <motion.h2 variants={fadeUp}>{title}</motion.h2>
+      {children && <motion.span variants={fadeUp}>{children}</motion.span>}
+    </motion.div>
+  );
+}
+
+function HeroBackdrop() {
+  const shouldReduceMotion = useReducedMotion();
+
+  return (
+    <div className="hero__media" aria-hidden="true">
+      <div className="hero__portrait-light" />
+      <motion.div
+        className="hero__trace hero__trace--one"
+        animate={shouldReduceMotion ? undefined : { x: ['-18%', '18%', '-18%'] }}
+        transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="hero__trace hero__trace--two"
+        animate={shouldReduceMotion ? undefined : { x: ['14%', '-16%', '14%'] }}
+        transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="hero__signal-map"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4, duration: 0.7 }}
+      >
+        {heroSignals.map((signal) => (
+          <motion.span
+            className="hero-signal"
+            key={signal.label}
+            style={{
+              '--signal-x': `${signal.x}%`,
+              '--signal-y': `${signal.y}%`,
+            }}
+            animate={
+              shouldReduceMotion
+                ? undefined
+                : {
+                    y: [0, -7, 0],
+                    opacity: [0.78, 1, 0.78],
+                  }
+            }
+            transition={{
+              delay: signal.delay,
+              duration: 3.8,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          >
+            <Icon icon={signal.icon} />
+            <small>{signal.label}</small>
+          </motion.span>
+        ))}
+      </motion.div>
+      <motion.div
+        className="hero__scan"
+        animate={shouldReduceMotion ? undefined : { y: ['-18%', '118%'] }}
+        transition={{ duration: 4.8, repeat: Infinity, ease: 'linear' }}
+      />
     </div>
   );
 }
@@ -259,15 +359,12 @@ function Hero() {
 
   return (
     <section className="hero" aria-labelledby="hero-title">
-      <div className="hero__media" aria-hidden="true" />
+      <HeroBackdrop />
       <motion.div
         className="hero__content"
         initial="hidden"
         animate="show"
-        variants={{
-          hidden: {},
-          show: { transition: { staggerChildren: 0.08 } },
-        }}
+        variants={revealContainer}
       >
         <motion.p variants={fadeUp} className="eyebrow">
           Enterprise identity engineer and software builder
@@ -290,18 +387,18 @@ function Hero() {
           </Link>
         </motion.div>
         <motion.div variants={fadeUp} className="hero__stats" aria-label="Career highlights">
-          <span>
-            <strong>IAM</strong>
-            RapidIdentity escalations
-          </span>
-          <span>
-            <strong>SaaS</strong>
-            Sold production app
-          </span>
-          <span>
-            <strong>Labs</strong>
-            Hyper-V, AD, Azure
-          </span>
+          {heroStats.map((stat) => (
+            <motion.span
+              key={stat.label}
+              variants={scaleIn}
+              whileHover={{ y: -4 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+            >
+              <Icon icon={stat.icon} />
+              <strong>{stat.label}</strong>
+              {stat.detail}
+            </motion.span>
+          ))}
         </motion.div>
       </motion.div>
     </section>
@@ -314,8 +411,14 @@ function About() {
       <SectionHeading eyebrow="About" title="Support depth, builder instincts">
         I work where software, infrastructure, and customer impact meet.
       </SectionHeading>
-      <div className="about__grid">
-        <div className="about__copy">
+      <motion.div
+        className="about__grid"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: '-100px' }}
+        variants={revealContainer}
+      >
+        <motion.div className="about__copy" variants={scaleIn}>
           <p>
             My day-to-day work is enterprise identity engineering: escalations,
             IAM, SSO, provisioning, directory sync, automation, log analysis,
@@ -327,11 +430,11 @@ function About() {
             solved a real multi-gigabyte log inspection problem. nvimwiz turns a
             developer onboarding pain point into a guided TUI.
           </p>
-        </div>
-        <div className="about__portrait">
+        </motion.div>
+        <motion.div className="about__portrait" variants={scaleIn}>
           <img src="/selfie.png" alt="Lewis Benson" />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
@@ -367,6 +470,44 @@ function Skills() {
 }
 
 function ProjectCard({ project, index }) {
+  const shouldReduceMotion = useReducedMotion();
+  const [cardMotion, setCardMotion] = useState({
+    rotateX: 0,
+    rotateY: 0,
+    glowX: '50%',
+    glowY: '50%',
+    mediaX: '0px',
+    mediaY: '0px',
+  });
+
+  const handlePointerMove = (event) => {
+    if (shouldReduceMotion || event.pointerType === 'touch') return;
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = (event.clientY - rect.top) / rect.height;
+
+    setCardMotion({
+      rotateX: (0.5 - y) * 7,
+      rotateY: (x - 0.5) * 8,
+      glowX: `${x * 100}%`,
+      glowY: `${y * 100}%`,
+      mediaX: `${(x - 0.5) * -12}px`,
+      mediaY: `${(y - 0.5) * -10}px`,
+    });
+  };
+
+  const resetCardMotion = () => {
+    setCardMotion({
+      rotateX: 0,
+      rotateY: 0,
+      glowX: '50%',
+      glowY: '50%',
+      mediaX: '0px',
+      mediaY: '0px',
+    });
+  };
+
   return (
     <motion.article
       className="project-card"
@@ -375,40 +516,61 @@ function ProjectCard({ project, index }) {
       viewport={{ once: true, margin: '-80px' }}
       transition={{ duration: 0.45, delay: Math.min(index * 0.05, 0.2) }}
     >
-      <Link to={`/projects/${project.slug}`} className="project-card__link">
-        <div className="project-card__image">
-          <img src={project.image} alt="" loading="lazy" />
-          {project.logo && <img className="project-card__logo" src={project.logo} alt="" loading="lazy" />}
-        </div>
-        <div className="project-card__content">
-          <p>{project.type}</p>
-          <h3>{project.name}</h3>
-          <span>{project.summary}</span>
-          <ul>
-            {project.tags.slice(0, 4).map((tag) => (
-              <li key={tag}>{tag}</li>
-            ))}
-          </ul>
-        </div>
-      </Link>
-      <div className="project-card__actions">
-        <Link className="text-link" to={`/projects/${project.slug}`}>
-          <Icon icon="mdi:book-open-page-variant-outline" />
-          Read note
+      <motion.div
+        className="project-card__surface"
+        onPointerMove={handlePointerMove}
+        onPointerLeave={resetCardMotion}
+        animate={
+          shouldReduceMotion
+            ? undefined
+            : {
+                rotateX: cardMotion.rotateX,
+                rotateY: cardMotion.rotateY,
+              }
+        }
+        style={{
+          '--glow-x': cardMotion.glowX,
+          '--glow-y': cardMotion.glowY,
+          '--media-x': cardMotion.mediaX,
+          '--media-y': cardMotion.mediaY,
+        }}
+        transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+      >
+        <Link to={`/projects/${project.slug}`} className="project-card__link">
+          <div className="project-card__image">
+            <img src={project.image} alt="" loading="lazy" />
+            {project.logo && <img className="project-card__logo" src={project.logo} alt="" loading="lazy" />}
+          </div>
+          <div className="project-card__content">
+            <p>{project.type}</p>
+            <h3>{project.name}</h3>
+            <span>{project.summary}</span>
+            <ul>
+              {project.tags.slice(0, 4).map((tag) => (
+                <li key={tag}>{tag}</li>
+              ))}
+            </ul>
+          </div>
         </Link>
-        {project.githubUrl && (
-          <a className="text-link" href={project.githubUrl} target="_blank" rel="noreferrer">
-            <Icon icon="mdi:github" />
-            Code
-          </a>
-        )}
-        {project.websiteUrl && (
-          <a className="text-link" href={project.websiteUrl} target="_blank" rel="noreferrer">
-            <Icon icon="mdi:open-in-new" />
-            Site
-          </a>
-        )}
-      </div>
+        <div className="project-card__actions">
+          <Link className="text-link" to={`/projects/${project.slug}`}>
+            <Icon icon="mdi:book-open-page-variant-outline" />
+            Read note
+          </Link>
+          {project.githubUrl && (
+            <a className="text-link" href={project.githubUrl} target="_blank" rel="noreferrer">
+              <Icon icon="mdi:github" />
+              Code
+            </a>
+          )}
+          {project.websiteUrl && (
+            <a className="text-link" href={project.websiteUrl} target="_blank" rel="noreferrer">
+              <Icon icon="mdi:open-in-new" />
+              Site
+            </a>
+          )}
+        </div>
+      </motion.div>
     </motion.article>
   );
 }
@@ -457,16 +619,22 @@ function Experience() {
   return (
     <section className="section experience">
       <SectionHeading eyebrow="Experience" title="Where the work shows up" />
-      <div className="timeline">
+      <motion.div
+        className="timeline"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: '-100px' }}
+        variants={revealContainer}
+      >
         {rows.map((row) => (
-          <article className="timeline__item" key={`${row.title}-${row.org}`}>
+          <motion.article className="timeline__item" key={`${row.title}-${row.org}`} variants={scaleIn}>
             <p>{row.date}</p>
             <h3>{row.title}</h3>
             <span>{row.org}</span>
             <p>{row.detail}</p>
-          </article>
+          </motion.article>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -478,14 +646,20 @@ function Contact() {
         Identity platforms, support engineering, production apps, developer
         tools, or the careful art of making a log file behave.
       </SectionHeading>
-      <div className="contact__actions">
+      <motion.div
+        className="contact__actions"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: '-100px' }}
+        variants={revealContainer}
+      >
         {socials.map((social) => (
-          <a className="button button--ghost" href={social.href} key={social.label}>
+          <motion.a className="button button--ghost" href={social.href} key={social.label} variants={scaleIn}>
             <Icon icon={social.icon} />
             {social.label}
-          </a>
+          </motion.a>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -701,7 +875,7 @@ function App() {
   }, [location.pathname, location.hash]);
 
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <AnimatePresence>{showSplash && <LoadingSplash onDone={() => setShowSplash(false)} />}</AnimatePresence>
       <Header />
       <AnimatePresence mode="wait">
@@ -722,7 +896,7 @@ function App() {
         </motion.div>
       </AnimatePresence>
       <Footer />
-    </>
+    </MotionConfig>
   );
 }
 
