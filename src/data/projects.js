@@ -40,6 +40,46 @@ export const projects = [
     },
   },
   {
+    name: 'BensonHub',
+    slug: 'bensonhub',
+    type: 'Private home operations platform',
+    role: 'Founder / Software Engineer',
+    year: '2026',
+    summary:
+      'A self-hosted household operations hub for calendars, reminders, notes, lists, chores, meals, weather, activity, and push notifications.',
+    impact:
+      'Turned everyday home coordination into a private, authenticated workspace with real deployment, OAuth integrations, database-backed sharing, and production-style operational controls.',
+    image: '/bensonhub-landing.png',
+    websiteUrl: 'https://bensonhub.com/',
+    githubUrl: null,
+    tags: [
+      'Go',
+      'React',
+      'TypeScript',
+      'PostgreSQL',
+      'OIDC',
+      'OAuth',
+      'Docker',
+      'Coolify',
+    ],
+    highlights: [
+      'Built a Go backend that owns OIDC login, encrypted sessions, protected APIs, database migrations, and static frontend serving.',
+      'Modeled private and shared household data across notes, reminders, calendar events, lists, chores, meal planning, activity, and notification state.',
+      'Added Google and Microsoft calendar connection flows with server-owned token handling so provider credentials never reach the React client.',
+    ],
+    caseStudy: {
+      headline: 'A private operations hub for the rhythms of home',
+      challenge:
+        'Home coordination has the same shape as many workplace operations problems: calendars, reminders, lists, notes, recurring chores, meals, weather, and shared context all live in separate places. The goal was to make that daily picture easier to act on without sending private household data through another generic SaaS dashboard.',
+      constraints:
+        'The app runs real personal infrastructure, so the public portfolio has to show architecture and product judgment without exposing private schedules, household data, deployment secrets, or internal operational details. The source remains private for that reason.',
+      solution:
+        'I built BensonHub as a single-container Go and React/TypeScript app with PostgreSQL, embedded migrations, Authentik OIDC, encrypted session cookies, same-origin APIs, calendar provider OAuth, push notification support, and a separate public landing page. The product centers on private-by-default records with explicit household and per-person sharing controls.',
+      outcome:
+        'BensonHub demonstrates full-stack product ownership beyond a demo: authentication, authorization, data modeling, recurring operational workflows, provider integrations, deployment, and a clear boundary between public presentation and private app behavior.',
+    },
+  },
+  {
     name: 'Big-Log Viewer',
     slug: 'big-log-viewer',
     type: 'Desktop utility',
