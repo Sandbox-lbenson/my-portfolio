@@ -42,13 +42,13 @@ export const projects = [
   {
     name: 'BensonHub',
     slug: 'bensonhub',
-    type: 'Private home operations platform',
+    type: 'Private home operations and security platform',
     role: 'Founder / Software Engineer',
     year: '2026',
     summary:
-      'A self-hosted household operations hub for calendars, reminders, notes, lists, chores, meals, weather, activity, and push notifications.',
+      'A self-hosted household operations hub for calendars, reminders, notes, lists, chores, meals, weather, security cameras, local AI, and push notifications.',
     impact:
-      'Turned everyday home coordination into a private, authenticated workspace with real deployment, OAuth integrations, database-backed sharing, and production-style operational controls.',
+      'Turns everyday home coordination and home security into a private, authenticated workspace backed by real rack, network, storage, and local AI infrastructure.',
     image: '/bensonhub-landing.png',
     websiteUrl: 'https://bensonhub.com/',
     githubUrl: null,
@@ -61,22 +61,26 @@ export const projects = [
       'OAuth',
       'Docker',
       'Coolify',
+      'Local AI',
+      'NAS',
+      'PoE networking',
     ],
     highlights: [
       'Built a Go backend that owns OIDC login, encrypted sessions, protected APIs, database migrations, and static frontend serving.',
-      'Modeled private and shared household data across notes, reminders, calendar events, lists, chores, meal planning, activity, and notification state.',
+      'Connected private household data with security camera viewing, notes, reminders, calendar events, lists, chores, meal planning, activity, and notification state.',
+      'Runs alongside rack-backed infrastructure with Cat 6 drops, mesh-style AP coverage, PoE cameras, a NAS-backed local AI knowledge base, and a GPU agent host.',
       'Added Google and Microsoft calendar connection flows with server-owned token handling so provider credentials never reach the React client.',
     ],
     caseStudy: {
       headline: 'A private operations hub for the rhythms of home',
       challenge:
-        'Home coordination has the same shape as many workplace operations problems: calendars, reminders, lists, notes, recurring chores, meals, weather, and shared context all live in separate places. The goal was to make that daily picture easier to act on without sending private household data through another generic SaaS dashboard.',
+        'Home coordination has the same shape as many workplace operations problems: calendars, reminders, lists, notes, recurring chores, meals, weather, security visibility, and shared context all live in separate places. The goal was to make that daily picture easier to act on without sending private household data through another generic SaaS dashboard.',
       constraints:
-        'The app runs real personal infrastructure, so the public portfolio has to show architecture and product judgment without exposing private schedules, household data, deployment secrets, or internal operational details. The source remains private for that reason.',
+        'The app runs real personal infrastructure, including home security systems, so the public portfolio has to show architecture and product judgment without exposing camera topology, private schedules, household data, deployment secrets, or internal operational details. The source remains private for that reason.',
       solution:
-        'I built BensonHub as a single-container Go and React/TypeScript app with PostgreSQL, embedded migrations, Authentik OIDC, encrypted session cookies, same-origin APIs, calendar provider OAuth, push notification support, and a separate public landing page. The product centers on private-by-default records with explicit household and per-person sharing controls.',
+        'I built BensonHub as a single-container Go and React/TypeScript app with PostgreSQL, embedded migrations, Authentik OIDC, encrypted session cookies, same-origin APIs, security camera access, calendar provider OAuth, push notification support, and a separate public landing page. It sits on a home network with Cat 6 runs, mesh-style AP coverage, router and PoE switching for cameras, a 48 TB Ugreen NAS with 64 GB DDR5 supporting local AI knowledge-base work, and a second desktop running agent workloads on an RTX 3060 Ti.',
       outcome:
-        'BensonHub demonstrates full-stack product ownership beyond a demo: authentication, authorization, data modeling, recurring operational workflows, provider integrations, deployment, and a clear boundary between public presentation and private app behavior.',
+        'BensonHub demonstrates full-stack product ownership beyond a demo: authentication, authorization, data modeling, security workflows, provider integrations, deployment, local infrastructure, and a clear boundary between public presentation and private app behavior.',
     },
   },
   {
@@ -148,9 +152,9 @@ export const projects = [
     role: 'Enterprise Engineer',
     year: '2025-present',
     summary:
-      'Rack-backed Hyper-V, Linux, Active Directory, Azure tenant, and RapidIdentity lab work used to reproduce escalations and validate identity automation behavior.',
+      'Rack-backed Hyper-V, Linux, Active Directory, Azure tenant, networking, storage, and RapidIdentity lab work used to reproduce escalations and validate identity automation behavior.',
     impact:
-      'Supports enterprise customers by turning ambiguous IAM, SSO, provisioning, directory sync, and automation issues into reproducible technical findings in a real homelab environment.',
+      'Supports enterprise customers by turning ambiguous IAM, SSO, provisioning, directory sync, and automation issues into reproducible technical findings in a real homelab environment that also runs production-style home services.',
     image: '/homelab-rack.jpg',
     imageFit: 'contain',
     websiteUrl: null,
@@ -163,10 +167,11 @@ export const projects = [
       'Homelab',
       'Hyper-V',
       'Linux',
+      'Networking',
       'Azure AD',
     ],
     highlights: [
-      'Maintains a local rack-backed lab for AD, database, Linux, and joined Windows scenarios.',
+      'Maintains a local rack-backed lab for AD, database, Linux, joined Windows, NAS, network, and GPU-assisted agent scenarios.',
       'Writes automations and scripts in RapidIdentity-specific tooling for enterprise identity workflows.',
       'Uses log analysis, reproduction, and configuration review to communicate root cause to customers, TAMs, Product, and Engineering.',
     ],
@@ -175,9 +180,9 @@ export const projects = [
       challenge:
         'Enterprise identity issues rarely arrive as neat bug reports. They show up as sync failures, SSO edge cases, provisioning surprises, or automation behavior that only makes sense in a customer-shaped environment.',
       constraints:
-        'Customer data has to remain protected, and troubleshooting has to be precise enough for stakeholders who may include support, TAMs, product managers, engineers, and customer admins.',
+        'Customer data has to remain protected, home security details have to stay appropriately abstracted, and troubleshooting has to be precise enough for stakeholders who may include support, TAMs, product managers, engineers, and customer admins.',
       solution:
-        'I use a local homelab rack with Hyper-V labs, Linux boxes, AD-style environments, Azure tenants, and product automations to recreate conditions safely. From there I can test assumptions, inspect logs, and document a repeatable path to resolution.',
+        'I use a local homelab rack with Hyper-V labs, Linux boxes, AD-style environments, Azure tenants, wired Cat 6 networking, PoE switching, NAS storage, GPU agent capacity, and product automations to recreate conditions safely. From there I can test assumptions, inspect logs, and document a repeatable path to resolution.',
       outcome:
         'The lab work makes support engineering more concrete: fewer guesses, cleaner handoffs, and better confidence when an issue needs product or engineering attention.',
     },
@@ -260,6 +265,9 @@ export const skills = [
       'Nginx',
       'Linux',
       'Hyper-V',
+      'NAS',
+      'PoE networking',
+      'Local AI',
       'PostgreSQL',
       'MongoDB',
       'DynamoDB',
