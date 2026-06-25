@@ -148,10 +148,11 @@ export const projects = [
     role: 'Enterprise Engineer',
     year: '2025-present',
     summary:
-      'Hyper-V, Linux, Active Directory, Azure tenant, and RapidIdentity lab work used to reproduce escalations and validate identity automation behavior.',
+      'Rack-backed Hyper-V, Linux, Active Directory, Azure tenant, and RapidIdentity lab work used to reproduce escalations and validate identity automation behavior.',
     impact:
-      'Supports enterprise customers by turning ambiguous IAM, SSO, provisioning, directory sync, and automation issues into reproducible technical findings.',
-    image: '/hyperv-lab.png',
+      'Supports enterprise customers by turning ambiguous IAM, SSO, provisioning, directory sync, and automation issues into reproducible technical findings in a real homelab environment.',
+    image: '/homelab-rack.jpg',
+    imageFit: 'contain',
     websiteUrl: null,
     githubUrl: null,
     tags: [
@@ -159,12 +160,13 @@ export const projects = [
       'IAM',
       'SSO',
       'Provisioning',
+      'Homelab',
       'Hyper-V',
       'Linux',
       'Azure AD',
     ],
     highlights: [
-      'Maintains local VM labs for AD, database, Linux, and joined Windows scenarios.',
+      'Maintains a local rack-backed lab for AD, database, Linux, and joined Windows scenarios.',
       'Writes automations and scripts in RapidIdentity-specific tooling for enterprise identity workflows.',
       'Uses log analysis, reproduction, and configuration review to communicate root cause to customers, TAMs, Product, and Engineering.',
     ],
@@ -175,7 +177,7 @@ export const projects = [
       constraints:
         'Customer data has to remain protected, and troubleshooting has to be precise enough for stakeholders who may include support, TAMs, product managers, engineers, and customer admins.',
       solution:
-        'I use Hyper-V labs with Linux boxes, AD-style environments, Azure tenants, and product automations to recreate conditions safely. From there I can test assumptions, inspect logs, and document a repeatable path to resolution.',
+        'I use a local homelab rack with Hyper-V labs, Linux boxes, AD-style environments, Azure tenants, and product automations to recreate conditions safely. From there I can test assumptions, inspect logs, and document a repeatable path to resolution.',
       outcome:
         'The lab work makes support engineering more concrete: fewer guesses, cleaner handoffs, and better confidence when an issue needs product or engineering attention.',
     },

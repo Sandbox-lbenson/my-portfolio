@@ -33,7 +33,7 @@ function About() {
 
         <div className="about-image">
           <Image
-            src="/selfie.png"
+            src="/lewis-headshot.jpg"
             alt="Lewis Benson"
             fill
           />

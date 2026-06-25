@@ -432,7 +432,7 @@ function About() {
           </p>
         </motion.div>
         <motion.div className="about__portrait" variants={scaleIn}>
-          <img src="/selfie.png" alt="Lewis Benson" />
+          <img src="/lewis-headshot.jpg" alt="Lewis Benson" />
         </motion.div>
       </motion.div>
     </section>
@@ -537,7 +537,7 @@ function ProjectCard({ project, index }) {
         transition={{ type: 'spring', stiffness: 260, damping: 24 }}
       >
         <Link to={`/projects/${project.slug}`} className="project-card__link">
-          <div className="project-card__image">
+          <div className={`project-card__image${project.imageFit === 'contain' ? ' project-card__image--contain' : ''}`}>
             <img src={project.image} alt="" loading="lazy" />
             {project.logo && <img className="project-card__logo" src={project.logo} alt="" loading="lazy" />}
           </div>
@@ -793,7 +793,7 @@ function ProjectPage() {
             )}
           </div>
         </div>
-        <div className="case-hero__image">
+        <div className={`case-hero__image${project.imageFit === 'contain' ? ' case-hero__image--contain' : ''}`}>
           <img src={project.image} alt="" />
           {project.logo && <img className="case-hero__logo" src={project.logo} alt="" />}
         </div>

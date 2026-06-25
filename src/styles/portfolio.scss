@@ -718,6 +718,14 @@ h3 {
     transform 0.35s ease;
 }
 
+.project-card__image--contain {
+  padding: 0.85rem;
+}
+
+.project-card__image--contain > img:first-child {
+  object-fit: contain;
+}
+
 .project-card:hover .project-card__image > img:first-child {
   filter: saturate(1.12) contrast(1.05);
   transform: scale(1.055) translate(var(--media-x, 0), var(--media-y, 0));
@@ -898,6 +906,14 @@ h3 {
   width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: cover;
+}
+
+.case-hero__image--contain {
+  padding: 1rem;
+}
+
+.case-hero__image--contain > img:first-child {
+  object-fit: contain;
 }
 
 .case-study-body {
