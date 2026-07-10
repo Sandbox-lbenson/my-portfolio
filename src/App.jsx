@@ -1,6 +1,14 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Icon } from '@iconify/react';
-import { AnimatePresence, motion, MotionConfig, useReducedMotion } from 'framer-motion';
+import {
+  AnimatePresence,
+  motion,
+  MotionConfig,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from 'framer-motion';
 import {
   Link,
   Navigate,
@@ -15,6 +23,7 @@ import { projects, skills } from './data/projects';
 const navItems = [
   { label: 'About', target: 'about' },
   { label: 'Skills', target: 'skills' },
+  { label: 'Lab', target: 'lab' },
   { label: 'Work', target: 'work' },
   { label: 'Notes', path: '/blog' },
   { label: 'Resume', path: '/resume' },
@@ -54,11 +63,16 @@ const scaleIn = {
   show: { opacity: 1, scale: 1, y: 0 },
 };
 
+const lineReveal = {
+  hidden: { scaleX: 0 },
+  show: { scaleX: 1 },
+};
+
 const heroSignals = [
   { label: 'IAM', icon: 'mdi:shield-key-outline', x: 68, y: 25, delay: 0 },
   { label: 'SSO', icon: 'mdi:key-chain', x: 86, y: 39, delay: 0.28 },
-  { label: 'AD', icon: 'mdi:server-network', x: 63, y: 58, delay: 0.48 },
-  { label: 'API', icon: 'mdi:api', x: 82, y: 70, delay: 0.18 },
+  { label: 'LAB', icon: 'mdi:server-network', x: 63, y: 58, delay: 0.48 },
+  { label: 'AI', icon: 'mdi:brain', x: 82, y: 70, delay: 0.18 },
 ];
 
 const heroStats = [
@@ -68,15 +82,55 @@ const heroStats = [
     icon: 'mdi:shield-key-outline',
   },
   {
-    label: 'SaaS',
+    label: 'Builder',
     detail: 'Sold production app',
     icon: 'mdi:rocket-launch-outline',
   },
   {
-    label: 'Labs',
-    detail: 'Hyper-V, AD, Azure',
+    label: 'Homelab',
+    detail: 'Rack, security, local AI',
     icon: 'mdi:server-network',
   },
+];
+
+const labSystems = [
+  {
+    label: 'Network edge',
+    value: 'Cat 6 + mesh APs',
+    detail: 'Wired backbone with whole-home wireless coverage',
+    icon: 'mdi:router-network',
+  },
+  {
+    label: 'Security plane',
+    value: 'PoE cameras',
+    detail: 'Router and switching dedicated to local camera access',
+    icon: 'mdi:cctv',
+  },
+  {
+    label: 'Knowledge base',
+    value: '48 TB NAS',
+    detail: 'Ugreen storage with 64 GB DDR5 for local AI context',
+    icon: 'mdi:database-outline',
+  },
+  {
+    label: 'Agent compute',
+    value: 'RTX 3060 Ti',
+    detail: 'A second desktop handles local agent workloads',
+    icon: 'mdi:desktop-tower-monitor',
+  },
+  {
+    label: 'Operations layer',
+    value: 'BensonHub',
+    detail: 'One private view for home systems and security',
+    icon: 'mdi:home-automation',
+  },
+];
+
+const labMetrics = [
+  { value: '48 TB', label: 'Local storage' },
+  { value: '64 GB', label: 'DDR5 memory' },
+  { value: '3060 Ti', label: 'Agent GPU' },
+  { value: 'Cat 6', label: 'Wired backbone' },
 ];
 
 function Monogram({ size = 44 }) {
@@ -169,8 +223,15 @@ function useHomeNav() {
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
   const navigateHome = useHomeNav();
   const location = useLocation();
+  const { scrollYProgress } = useScroll();
+  const progressX = useSpring(scrollYProgress, {
+    stiffness: 130,
+    damping: 28,
+    mass: 0.25,
+  });
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -189,6 +250,35 @@ function Header() {
     document.body.classList.toggle('menu-open', isOpen);
     return () => document.body.classList.remove('menu-open');
   }, [isOpen]);
+
+  useEffect(() => {
+    if (location.pathname !== '/') {
+      setActiveSection('');
+      return undefined;
+    }
+
+    const sections = navItems
+      .filter((item) => item.target)
+      .map((item) => document.getElementById(item.target))
+      .filter(Boolean);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (visible[0]) setActiveSection(visible[0].target.id);
+      },
+      {
+        rootMargin: '-18% 0px -62% 0px',
+        threshold: [0, 0.2, 0.45],
+      },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [location.pathname]);
 
   const handleNav = (item) => {
     setIsOpen(false);
@@ -222,7 +312,7 @@ function Header() {
           ) : (
             <button
               key={item.label}
-              className={`nav-link${item.cta ? ' nav-link--cta' : ''}`}
+              className={`nav-link${item.cta ? ' nav-link--cta' : ''}${activeSection === item.target ? ' active' : ''}`}
               type="button"
               onClick={() => handleNav(item)}
             >
@@ -275,6 +365,11 @@ function Header() {
           </motion.nav>
         )}
       </AnimatePresence>
+      <motion.div
+        className="site-header__progress"
+        style={{ scaleX: progressX }}
+        aria-hidden="true"
+      />
     </motion.header>
   );
 }
@@ -291,6 +386,7 @@ function SectionHeading({ eyebrow, title, children }) {
       <motion.p variants={fadeUp}>{eyebrow}</motion.p>
       <motion.h2 variants={fadeUp}>{title}</motion.h2>
       {children && <motion.span variants={fadeUp}>{children}</motion.span>}
+      <motion.div className="section-heading__rule" variants={lineReveal} />
     </motion.div>
   );
 }
@@ -464,6 +560,130 @@ function Skills() {
             </ul>
           </motion.div>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function LabShowcase() {
+  const sectionRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const imageY = useTransform(scrollYProgress, [0, 1], [-24, 24]);
+  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.04, 1, 1.04]);
+
+  return (
+    <section className="lab-band" id="lab" ref={sectionRef}>
+      <div className="section lab-showcase">
+        <SectionHeading eyebrow="The homelab" title="Real infrastructure behind the work">
+          A private rack where identity labs, home security, storage, local AI,
+          and the services behind BensonHub all meet.
+        </SectionHeading>
+
+        <div className="lab-showcase__stage">
+          <motion.figure
+            className="lab-rack"
+            initial={{ opacity: 0, x: -34 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-90px' }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <motion.img
+              src="/homelab-rack.jpg"
+              alt="Lewis Benson's home infrastructure rack"
+              loading="lazy"
+              style={
+                shouldReduceMotion
+                  ? undefined
+                  : { y: imageY, scale: imageScale }
+              }
+            />
+            <div className="lab-rack__shade" />
+            <div className="lab-rack__scan" aria-hidden="true" />
+            <div className="lab-rack__status">
+              <span aria-hidden="true" />
+              <div>
+                <small>Homelab core</small>
+                <strong>Online</strong>
+              </div>
+            </div>
+            <figcaption>
+              <Icon icon="mdi:rack" />
+              The physical system, not a stock photo
+            </figcaption>
+          </motion.figure>
+
+          <motion.div
+            className="lab-topology"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={revealContainer}
+          >
+            <motion.p className="lab-topology__kicker" variants={fadeUp}>
+              Private compute / network / storage
+            </motion.p>
+            <motion.h3 variants={fadeUp}>
+              One rack. Several layers of useful infrastructure.
+            </motion.h3>
+            <motion.p className="lab-topology__intro" variants={fadeUp}>
+              The same environment I use to reproduce enterprise identity
+              issues also powers cameras, local services, a private knowledge
+              base, and agent workloads.
+            </motion.p>
+
+            <div className="lab-flow">
+              <div className="lab-flow__rail" aria-hidden="true">
+                <span className="lab-flow__packet lab-flow__packet--one" />
+                <span className="lab-flow__packet lab-flow__packet--two" />
+                <span className="lab-flow__packet lab-flow__packet--three" />
+              </div>
+              {labSystems.map((system) => (
+                <motion.article className="lab-node" key={system.label} variants={fadeUp}>
+                  <span className="lab-node__icon">
+                    <Icon icon={system.icon} />
+                  </span>
+                  <span className="lab-node__copy">
+                    <small>{system.label}</small>
+                    <strong>{system.value}</strong>
+                    <span>{system.detail}</span>
+                  </span>
+                  <span className="lab-node__state" aria-label="Online" />
+                </motion.article>
+              ))}
+            </div>
+
+            <motion.div className="lab-topology__actions" variants={fadeUp}>
+              <Link className="text-link" to="/projects/enterprise-identity-labs">
+                <Icon icon="mdi:server-network" />
+                Explore the lab
+              </Link>
+              <Link className="text-link" to="/projects/bensonhub">
+                <Icon icon="mdi:home-automation" />
+                See BensonHub
+              </Link>
+            </motion.div>
+          </motion.div>
+        </div>
+
+        <motion.div
+          className="lab-metrics"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-70px' }}
+          variants={revealContainer}
+          aria-label="Homelab specifications"
+        >
+          {labMetrics.map((metric) => (
+            <motion.div key={metric.label} variants={scaleIn}>
+              <strong>{metric.value}</strong>
+              <span>{metric.label}</span>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
@@ -686,6 +906,7 @@ function HomePage() {
       <Hero />
       <About />
       <Skills />
+      <LabShowcase />
       <Projects />
       <Experience />
       <Contact />
