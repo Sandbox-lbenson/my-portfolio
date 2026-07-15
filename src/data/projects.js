@@ -48,7 +48,7 @@ export const projects = [
     summary:
       'A self-hosted household operations hub for calendars, reminders, notes, lists, chores, meals, weather, security cameras, local AI, and push notifications.',
     impact:
-      'Turns everyday home coordination and home security into a private, authenticated workspace backed by real rack, network, storage, and local AI infrastructure.',
+      'Turns everyday home coordination and security into a private, authenticated workspace connected to separately hosted camera, storage, automation, and local AI services.',
     image: '/bensonhub-landing.png',
     websiteUrl: 'https://bensonhub.com/',
     githubUrl: null,
@@ -61,6 +61,7 @@ export const projects = [
       'OAuth',
       'Docker',
       'Coolify',
+      'GitHub Actions',
       'Local AI',
       'NAS',
       'PoE networking',
@@ -68,7 +69,8 @@ export const projects = [
     highlights: [
       'Built a Go backend that owns OIDC login, encrypted sessions, protected APIs, database migrations, and static frontend serving.',
       'Connected private household data with security camera viewing, notes, reminders, calendar events, lists, chores, meal planning, activity, and notification state.',
-      'Runs alongside rack-backed infrastructure with Cat 6 drops, mesh-style AP coverage, PoE cameras, a NAS-backed local AI knowledge base, and a GPU agent host.',
+      'Runs across a Cat 6 backbone with wired access points, PoE camera services on a Ugreen NAS, a documentation-backed local AI knowledge base, and a separate GPU agent host.',
+      'Uses Coolify and GitHub Actions to manage repeatable deployments across self-hosted web infrastructure.',
       'Added Google and Microsoft calendar connection flows with server-owned token handling so provider credentials never reach the React client.',
     ],
     caseStudy: {
@@ -78,7 +80,7 @@ export const projects = [
       constraints:
         'The app runs real personal infrastructure, including home security systems, so the public portfolio has to show architecture and product judgment without exposing camera topology, private schedules, household data, deployment secrets, or internal operational details. The source remains private for that reason.',
       solution:
-        'I built BensonHub as a single-container Go and React/TypeScript app with PostgreSQL, embedded migrations, Authentik OIDC, encrypted session cookies, same-origin APIs, security camera access, calendar provider OAuth, push notification support, and a separate public landing page. It sits on a home network with Cat 6 runs, mesh-style AP coverage, router and PoE switching for cameras, a 48 TB Ugreen NAS with 64 GB DDR5 supporting local AI knowledge-base work, and a second desktop running agent workloads on an RTX 3060 Ti.',
+        'I built BensonHub as a Go application container serving a React/TypeScript client, backed by PostgreSQL, embedded migrations, Authentik OIDC, encrypted session cookies, same-origin APIs, security camera access, calendar provider OAuth, push notification support, and a separate public landing page. Coolify and GitHub Actions manage deployment, while the broader home platform uses Cat 6 wired access points, PoE camera services on a 48 TB Ugreen NAS, a self-hosted AI knowledge base built from my own documentation, and a separate RTX 3060 Ti desktop for agent workloads.',
       outcome:
         'BensonHub demonstrates full-stack product ownership beyond a demo: authentication, authorization, data modeling, security workflows, provider integrations, deployment, local infrastructure, and a clear boundary between public presentation and private app behavior.',
     },
@@ -152,9 +154,9 @@ export const projects = [
     role: 'Enterprise Engineer',
     year: '2025-present',
     summary:
-      'Rack-backed Hyper-V, Linux, Active Directory, Azure tenant, networking, storage, and RapidIdentity lab work used to reproduce escalations and validate identity automation behavior.',
+      'A Hyper-V-hosted hybrid identity lab combining RapidIdentity, AD DS and DNS, PostgreSQL source data, Linux systems, and legacy applications with controlled synchronization to Microsoft Entra ID and other cloud services.',
     impact:
-      'Supports enterprise customers by turning ambiguous IAM, SSO, provisioning, directory sync, and automation issues into reproducible technical findings in a real homelab environment that also runs production-style home services.',
+      'Turns ambiguous IAM, SSO, provisioning, directory synchronization, and migration issues into reproducible findings across source databases, identity orchestration, AD DS, and downstream cloud systems.',
     image: '/homelab-rack.jpg',
     imageFit: 'contain',
     websiteUrl: null,
@@ -166,25 +168,29 @@ export const projects = [
       'Provisioning',
       'Homelab',
       'Hyper-V',
+      'AD DS',
+      'Microsoft Entra ID',
+      'Identity Bridge',
+      'PostgreSQL',
       'Linux',
       'Networking',
-      'Azure AD',
     ],
     highlights: [
-      'Maintains a local rack-backed lab for AD, database, Linux, joined Windows, NAS, network, and GPU-assisted agent scenarios.',
-      'Writes automations and scripts in RapidIdentity-specific tooling for enterprise identity workflows.',
-      'Uses log analysis, reproduction, and configuration review to communicate root cause to customers, TAMs, Product, and Engineering.',
+      'Operates dedicated Hyper-V hosts with RapidIdentity, AD DS and DNS, Identity Bridge, PostgreSQL-backed source data, Ubuntu services, joined clients, and legacy software for migration testing.',
+      'Models lifecycle flows from a PostgreSQL source through RapidIdentity and AD DS, then into selected downstream services including Microsoft Entra ID, Google, and Moodle.',
+      'Validates password-filter and RapidIdentity meta-directory flows so password changes can be synchronized securely to downstream systems.',
+      'Recreates customer-shaped environments with test data, then uses logs and configuration review to communicate root cause to customers, TAMs, Product, and Engineering.',
     ],
     caseStudy: {
       headline: 'Reproducing identity problems before recommending fixes',
       challenge:
-        'Enterprise identity issues rarely arrive as neat bug reports. They show up as sync failures, SSO edge cases, provisioning surprises, or automation behavior that only makes sense in a customer-shaped environment.',
+        'Enterprise identity issues rarely arrive as neat bug reports. A single failure can cross an authoritative database, identity orchestration, AD DS, secure cloud connectivity, and several downstream systems before it becomes visible to an administrator.',
       constraints:
-        'Customer data has to remain protected, home security details have to stay appropriately abstracted, and troubleshooting has to be precise enough for stakeholders who may include support, TAMs, product managers, engineers, and customer admins.',
+        'Customer data has to remain protected, so reproductions use test identities and customer-shaped configurations. Identity VMs run on dedicated Hyper-V hardware separate from camera and NAS workloads, and the architecture must distinguish on-premises lab components from the cloud services they connect to.',
       solution:
-        'I use a local homelab rack with Hyper-V labs, Linux boxes, AD-style environments, Azure tenants, wired Cat 6 networking, PoE switching, NAS storage, GPU agent capacity, and product automations to recreate conditions safely. From there I can test assumptions, inspect logs, and document a repeatable path to resolution.',
+        'I built an authoritative source in PostgreSQL on Ubuntu and route identity data through RapidIdentity into AD DS, where domain controllers also provide DNS. Selected identities continue to Microsoft Entra ID, Google, and Moodle, while a password filter writes password changes back to the RapidIdentity meta-directory for secure downstream synchronization. Identity Bridge provides secured cloud connectivity, and the Hyper-V environment includes joined clients and legacy applications for migration and compatibility testing.',
       outcome:
-        'The lab work makes support engineering more concrete: fewer guesses, cleaner handoffs, and better confidence when an issue needs product or engineering attention.',
+        'The result is an end-to-end hybrid identity testbed: fewer guesses, more faithful reproductions, cleaner engineering handoffs, and better confidence when validating synchronization or migration behavior.',
     },
   },
   {
@@ -237,6 +243,10 @@ export const skills = [
       'IAM',
       'SSO',
       'Provisioning',
+      'AD DS',
+      'Microsoft Entra ID',
+      'Hybrid identity',
+      'Identity Bridge',
       'Directory sync',
       'Escalations',
       'Root-cause analysis',
@@ -268,6 +278,8 @@ export const skills = [
       'NAS',
       'PoE networking',
       'Local AI',
+      'Coolify',
+      'GitHub Actions',
       'PostgreSQL',
       'MongoDB',
       'DynamoDB',

@@ -88,28 +88,34 @@ const heroStats = [
   },
   {
     label: 'Homelab',
-    detail: 'Rack, security, local AI',
+    detail: 'Hyper-V, security, local AI',
     icon: 'mdi:server-network',
   },
 ];
 
 const labSystems = [
   {
+    label: 'Hybrid identity lab',
+    value: 'Hyper-V + RapidIdentity',
+    detail: 'Source-driven AD DS workflows connected to cloud systems',
+    icon: 'mdi:server-network',
+  },
+  {
     label: 'Network edge',
-    value: 'Cat 6 + mesh APs',
-    detail: 'Wired backbone with whole-home wireless coverage',
+    value: 'Cat 6 + wired APs',
+    detail: 'A wired backbone provides whole-home wireless coverage',
     icon: 'mdi:router-network',
   },
   {
     label: 'Security plane',
-    value: 'PoE cameras',
-    detail: 'Router and switching dedicated to local camera access',
+    value: 'PoE cameras + NAS',
+    detail: 'Camera services run separately on the Ugreen NAS',
     icon: 'mdi:cctv',
   },
   {
     label: 'Knowledge base',
-    value: '48 TB NAS',
-    detail: 'Ugreen storage with 64 GB DDR5 for local AI context',
+    value: 'Self-hosted AI',
+    detail: 'Documentation on the 48 TB NAS feeds private retrieval',
     icon: 'mdi:database-outline',
   },
   {
@@ -117,12 +123,6 @@ const labSystems = [
     value: 'RTX 3060 Ti',
     detail: 'A second desktop handles local agent workloads',
     icon: 'mdi:desktop-tower-monitor',
-  },
-  {
-    label: 'Operations layer',
-    value: 'BensonHub',
-    detail: 'One private view for home systems and security',
-    icon: 'mdi:home-automation',
   },
 ];
 
@@ -516,9 +516,10 @@ function About() {
       >
         <motion.div className="about__copy" variants={scaleIn}>
           <p>
-            My day-to-day work is enterprise identity engineering: escalations,
-            IAM, SSO, provisioning, directory sync, automation, log analysis,
-            issue reproduction, and clear customer communication.
+            My day-to-day work is enterprise identity engineering: RapidIdentity
+            escalations, IAM, SSO, provisioning, AD DS and Entra ID synchronization,
+            automation, log analysis, issue reproduction, and clear customer
+            communication.
           </p>
           <p>
             I also build software when a problem deserves a tool. Northstar VSS
@@ -579,8 +580,8 @@ function LabShowcase() {
     <section className="lab-band" id="lab" ref={sectionRef}>
       <div className="section lab-showcase">
         <SectionHeading eyebrow="The homelab" title="Real infrastructure behind the work">
-          A private rack where identity labs, home security, storage, local AI,
-          and the services behind BensonHub all meet.
+          A private infrastructure stack with distinct identity, home security,
+          automation, storage, deployment, and local AI workloads.
         </SectionHeading>
 
         <div className="lab-showcase__stage">
@@ -624,15 +625,16 @@ function LabShowcase() {
             variants={revealContainer}
           >
             <motion.p className="lab-topology__kicker" variants={fadeUp}>
-              Private compute / network / storage
+              Hybrid identity / network / compute
             </motion.p>
             <motion.h3 variants={fadeUp}>
-              One rack. Several layers of useful infrastructure.
+              One homelab. Distinct systems with clear boundaries.
             </motion.h3>
             <motion.p className="lab-topology__intro" variants={fadeUp}>
-              The same environment I use to reproduce enterprise identity
-              issues also powers cameras, local services, a private knowledge
-              base, and agent workloads.
+              Dedicated Hyper-V hardware runs customer-shaped identity labs.
+              Separate Ubuntu servers, NAS services, and GPU compute handle home
+              automation, databases, S3 backup jobs, cameras, web deployments,
+              and local AI.
             </motion.p>
 
             <div className="lab-flow">
@@ -952,9 +954,9 @@ function ResumePage() {
         <aside className="resume-summary">
           <h3>Current focus</h3>
           <p>
-            RapidIdentity escalations, IAM, SSO, provisioning, directory sync,
-            automation, logs, code-level debugging, AWS infrastructure, and
-            customer-facing root-cause communication.
+            RapidIdentity escalations, IAM, SSO, provisioning, AD DS-to-Entra
+            synchronization, automation, logs, code-level debugging, AWS
+            infrastructure, and customer-facing root-cause communication.
           </p>
           <a className="button button--primary" href="/resume.pdf" target="_blank" rel="noreferrer">
             <Icon icon="mdi:download-outline" />
