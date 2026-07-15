@@ -78,7 +78,7 @@ const heroSignals = [
 const heroStats = [
   {
     label: 'IAM',
-    detail: 'RapidIdentity escalations',
+    detail: 'Escalation engineering',
     icon: 'mdi:shield-key-outline',
   },
   {
@@ -96,7 +96,7 @@ const heroStats = [
 const labSystems = [
   {
     label: 'Hybrid identity lab',
-    value: 'Hyper-V + RapidIdentity',
+    value: 'Hyper-V identity stack',
     detail: 'Source-driven AD DS workflows connected to cloud systems',
     icon: 'mdi:server-network',
   },
@@ -516,8 +516,8 @@ function About() {
       >
         <motion.div className="about__copy" variants={scaleIn}>
           <p>
-            My day-to-day work is enterprise identity engineering: RapidIdentity
-            escalations, IAM, SSO, provisioning, AD DS and Entra ID synchronization,
+            My day-to-day work is enterprise identity engineering: escalations,
+            IAM, SSO, provisioning, AD DS and Entra ID synchronization,
             automation, log analysis, issue reproduction, and clear customer
             communication.
           </p>
@@ -817,7 +817,7 @@ function Experience() {
   const rows = [
     {
       title: 'Enterprise Engineer / Service Engineer',
-      org: 'Jamf / Identity Automation - RapidIdentity',
+      org: 'Jamf / Identity Automation',
       date: 'Jan 2025 - Present',
       detail:
         'Escalation-level IAM support, customer troubleshooting, automation work, root-cause analysis, and product/engineering handoffs.',
@@ -954,7 +954,7 @@ function ResumePage() {
         <aside className="resume-summary">
           <h3>Current focus</h3>
           <p>
-            RapidIdentity escalations, IAM, SSO, provisioning, AD DS-to-Entra
+            Identity platform escalations, IAM, SSO, provisioning, AD DS-to-Entra
             synchronization, automation, logs, code-level debugging, AWS
             infrastructure, and customer-facing root-cause communication.
           </p>

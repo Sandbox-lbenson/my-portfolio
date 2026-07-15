@@ -154,7 +154,7 @@ export const projects = [
     role: 'Enterprise Engineer',
     year: '2025-present',
     summary:
-      'A Hyper-V-hosted hybrid identity lab combining RapidIdentity, AD DS and DNS, PostgreSQL source data, Linux systems, and legacy applications with controlled synchronization to Microsoft Entra ID and other cloud services.',
+      'A Hyper-V-hosted hybrid identity lab combining AD DS and DNS, PostgreSQL source data, Linux systems, and legacy applications with controlled synchronization to Microsoft Entra ID and other cloud services.',
     impact:
       'Turns ambiguous IAM, SSO, provisioning, directory synchronization, and migration issues into reproducible findings across source databases, identity orchestration, AD DS, and downstream cloud systems.',
     image: '/homelab-rack.jpg',
@@ -162,16 +162,16 @@ export const projects = [
     websiteUrl: null,
     githubUrl: null,
     tags: [
-      'RapidIdentity',
       'IAM',
       'SSO',
       'Provisioning',
-      'Homelab',
       'Hyper-V',
       'AD DS',
       'Microsoft Entra ID',
+      'RapidIdentity',
       'Identity Bridge',
       'PostgreSQL',
+      'Homelab',
       'Linux',
       'Networking',
     ],
@@ -239,14 +239,12 @@ export const skills = [
   {
     group: 'Identity and support engineering',
     items: [
-      'RapidIdentity',
       'IAM',
       'SSO',
       'Provisioning',
       'AD DS',
       'Microsoft Entra ID',
       'Hybrid identity',
-      'Identity Bridge',
       'Directory sync',
       'Escalations',
       'Root-cause analysis',
